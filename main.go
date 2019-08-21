@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/martinomburajr/gcp-vision-api/app"
 	"github.com/martinomburajr/gcp-vision-api/app/router"
 	"log"
 	"net/http"
@@ -9,10 +10,10 @@ import (
 	"strconv"
 )
 
-var PORT = 8190
+var PORT = 8080
 
 func init() {
-	err := os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", "credentials/credentials.json")
+	err := os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", app.CredentialsLocalPath)
 
 	if err != nil {
 		msg := "error setting GOOGLE_APPLICATION_CREDENTIALS."
@@ -24,13 +25,13 @@ func main() {
 	server := router.GCPVisionAPIServer{}
 	err := server.Init()
 	if err != nil {
-		log.Fatalf("error initializing server")
+		log.Fatalf("error initializing server | %s ", err.Error())
 	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Printf("error parsing ENV: PORT defaulting to %d ", PORT)
-	}else {
+	} else {
 		envPort, err := strconv.ParseInt(port, 10, 64)
 		if err != nil {
 			log.Printf("error parsing ENV: PORT defaulting to %d | %v", PORT, err)
@@ -45,8 +46,3 @@ func main() {
 		log.Println(err)
 	}
 }
-
-
-
-
-

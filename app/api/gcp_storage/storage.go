@@ -40,9 +40,9 @@ func GetFileNameFromBucket(ctx context.Context, gcsBucket, path string, client *
 			break
 		}
 		if err != nil {
-			return "",fmt.Errorf("error reading from bucket e.g.prefix | %v", err)
+			return "", fmt.Errorf("error reading from bucket e.g.prefix | %v", err)
 		}
-		return attrs.Name,nil
+		return attrs.Name, nil
 	}
 	return "", nil
 }
@@ -62,14 +62,14 @@ func GetFileNamesFromBucket(ctx context.Context, gcsBucket, path string, client 
 			break
 		}
 		if err != nil {
-			return nil ,fmt.Errorf("error reading from bucket e.g.prefix | %v", err)
+			return nil, fmt.Errorf("error reading from bucket e.g.prefix | %v", err)
 		}
 		filenames = append(filenames, attrs.Name)
 	}
 	if len(filenames) == 0 {
 		return nil, fmt.Errorf("no items in file location")
 	}
-	return filenames,nil
+	return filenames, nil
 }
 
 // GetObjectHandlesFromBucket returns a list of object handles from a given bucket and path
@@ -89,14 +89,14 @@ func GetObjectHandlesFromBucket(ctx context.Context, gcsBucket, path string, cli
 			break
 		}
 		if err != nil {
-			return nil ,fmt.Errorf("error reading from bucket e.g.prefix | %v", err)
+			return nil, fmt.Errorf("error reading from bucket e.g.prefix | %v", err)
 		}
 		files = append(files, attrs)
 	}
 	if len(files) == 0 {
 		return nil, fmt.Errorf("no items in file location")
 	}
-	return files,nil
+	return files, nil
 }
 
 //Download retrieves the item from cloud storage. The MIME type in Cloud storage must be application/json otherwise
@@ -131,7 +131,6 @@ func RetrieveText(response *DocumentDetectResponse) (string, error) {
 	}
 	return top + "\n\n" + str, nil
 }
-
 
 //DocumentDetectResponse represents the output upon analyzing a document. The fulltext annotations are omitted to save space.
 type DocumentDetectResponse struct {

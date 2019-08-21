@@ -1,7 +1,5 @@
 package vision
 
-
-
 // [END imports]
 //
 //var _ = context.Background()

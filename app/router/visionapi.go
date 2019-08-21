@@ -21,7 +21,7 @@ func OCRHandler(gCPVisionAPIServer *GCPVisionAPIServer) AppHandler {
 	return func(w http.ResponseWriter, r *http.Request) *AppError {
 
 		outputParam := r.URL.Query().Get("output")
-		if outputParam == "json" || outputParam == ""|| outputParam == "text" {
+		if outputParam != "json" && outputParam != "" && outputParam != "text" {
 			err := fmt.Errorf("invalid url param")
 			return AppErrorf(http.StatusBadRequest, fmt.Sprintf("invalid param. output = 'json', 'text | %v", err), err)
 		}
@@ -163,6 +163,7 @@ func OCRBucketDirHandler(gCPVisionAPIServer *GCPVisionAPIServer) AppHandler {
 				fileName := object.Name
 				fileDestinationURI = fmt.Sprintf("gs://%s/%s/%s", outputBucketName, outputPath, fileName)
 				fileSourceURI := fmt.Sprintf("%s/%s", sourceFullURI, fileName)
+
 				/////////////////////////////////////////// CALL VISION API
 				annotateFilesOperation, err := vision.DetectAsyncDocumentURI(ctx, fileSourceURI, fileDestinationURI)
 				if err != nil {
@@ -191,22 +192,22 @@ func OCRBucketDirHandler(gCPVisionAPIServer *GCPVisionAPIServer) AppHandler {
 
 		sb := strings.Builder{}
 		//for {
-			log.Print(" In for! ")
-			select {
-			case str := <-fileDoneChan:
-				sb.WriteString(str + "\n")
-				log.Print(str)
-			case err := <-errChan:
-				errStr := fmt.Sprintf("error: %d | %s | %s", err.Code, err.Message, err.Error.Error())
-				sb.WriteString(errStr)
-			case <-completeChan:
-				log.Print(" COMPLETE INVOKED! ")
-				w.WriteHeader(http.StatusCreated)
-				w.Write([]byte(sb.String()))
-				break
-			default:
-				fmt.Print("Waiting on Channels")
-			}
+		log.Print(" In for! ")
+		select {
+		case str := <-fileDoneChan:
+			sb.WriteString(str + "\n")
+			log.Print(str)
+		case err := <-errChan:
+			errStr := fmt.Sprintf("error: %d | %s | %s", err.Code, err.Message, err.Error.Error())
+			sb.WriteString(errStr)
+		case <-completeChan:
+			log.Print(" COMPLETE INVOKED! ")
+			w.WriteHeader(http.StatusCreated)
+			w.Write([]byte(sb.String()))
+			break
+		default:
+			fmt.Print("Waiting on Channels")
+		}
 		//}
 		return nil
 	}
@@ -247,7 +248,7 @@ func OCRBucketDirHandler(gCPVisionAPIServer *GCPVisionAPIServer) AppHandler {
 //log.Printf("Creating file /%s/%s\n", outputPath, newPath)
 //gcp_storage.UploadTextToGCS(ctx, parsedText, fullPath, outputFullURI, gCPVisionAPIServer.StorageClient)
 
-// FileInfoJSON represents the POST from the client detailing the URI for the client. 
+// FileInfoJSON represents the POST from the client detailing the URI for the client.
 // Once processed the items will be sent to the OutputURI. Both must be specified
 type FileInfoJSON struct {
 	// OutputURI represents the GCS URI to drop off the artifacts after processing.

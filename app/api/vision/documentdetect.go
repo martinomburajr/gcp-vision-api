@@ -9,12 +9,7 @@ import (
 
 // [END imports]
 
-
-
-
 // [START vision_text_detection_pdf_gcs]
-
-
 
 // DetectAsyncDocumentURI performs Optical Character Recognition (OCR) on a
 // PDF file stored in GCS.
@@ -53,12 +48,5 @@ func DetectAsyncDocumentURI(ctx context.Context, gcsSourceURI,
 
 	return client.AsyncBatchAnnotateFiles(ctx, request)
 }
-
-
-
-
-
-
-
 
 // [END vision_text_detection_pdf_gcs]

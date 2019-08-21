@@ -15,7 +15,7 @@ func TestHealthCheckHandler(t *testing.T) {
 	log.Print(server.URL)
 	defer server.Close()
 
-	request := httptest.NewRequest(http.MethodGet,  server.URL + "/", nil)
+	request := httptest.NewRequest(http.MethodGet, server.URL+"/", nil)
 	client := http.Client{}
 
 	response, err := client.Do(request)

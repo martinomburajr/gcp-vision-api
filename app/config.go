@@ -1,7 +1,6 @@
 package app
 
-
 const (
-	CredentialsLocalPath = "credentials/credentials.json"
-	GCSScheme = "gs://"
+	CredentialsLocalPath = "app/credentials/credentials.json"
+	GCSScheme            = "gs://"
 )

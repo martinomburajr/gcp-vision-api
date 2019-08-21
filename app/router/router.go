@@ -15,7 +15,7 @@ import (
 // GCPVisionAPIServer is the base server that handles all incoming requests.
 // It is equipped with a router and a reference to Vision API
 type GCPVisionAPIServer struct {
-	Router *mux.Router
+	Router        *mux.Router
 	StorageClient *storage.Client
 }
 
@@ -26,8 +26,8 @@ func (g *GCPVisionAPIServer) Init() error {
 
 	storageClient, err := storage.NewClient(ctx, clientOption)
 	if err != nil {
-		return fmt.Errorf("failed to initialize cloud storage | %v",
-			err)
+		return fmt.Errorf("failed to initialize cloud storage | %s",
+			err.Error())
 	}
 	g.StorageClient = storageClient
 
